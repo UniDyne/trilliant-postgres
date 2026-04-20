@@ -2,14 +2,17 @@ const
     fs = require("fs"),
     path = require("path");
 const {Pool} = require('pg');
-
+const {ServiceWrapper} = require('trilliant');
 const { loadQueries } = require('./QueryJobs');
 
-module.exports = class TrilliantService extends ServiceWrapper {
+module.exports = class PostgresService extends ServiceWrapper {
     #pool;
 
     constructor(app, config) {
         super(app, config);
+
+        if(typeof config === "string")
+            config = JSON.parse(fs.readFileSync(path.join(app.Env.appPath, config), "utf8"));
 
         this.#pool = new Pool(config);
     }
@@ -26,7 +29,7 @@ module.exports = class TrilliantService extends ServiceWrapper {
             q = JSON.parse( fs.readFileSync(path.join(plug.homeDir, data)) );
         else q = data;
 
-        plug.Queries = loadQueries(q, plug.homeDir, this);
+        plug.Queries = this.loadQueries(q, plug.homeDir);
     }
 
     getConnection() {
@@ -34,6 +37,6 @@ module.exports = class TrilliantService extends ServiceWrapper {
     }
 
     loadQueries(q, homeDir) {
-        return loadQueries(q, homeDir, this);
+        return loadQueries(q, homeDir, this.#pool);
     }
 };

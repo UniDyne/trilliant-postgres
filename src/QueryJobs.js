@@ -27,7 +27,7 @@ async function execJob(job, pool) {
 	console.log(job.queryDef.argmap);
 
 	let result = await pool.query(sql, params);
-	job.resultHandler(result);
+	job.resultHandler(result.rows);
 }
 
 
@@ -163,7 +163,7 @@ function getNamedArgMap(sql) {
 	const pargs = [];
 	sql = sql.replace(RX_PARAM, (w,g,t) => {
 		pargs.push(g);
-		return `${pargs.length}`;
+		return `$${pargs.length}`;
 	});
 
 	//console.log(pargs);
