@@ -1,0 +1,13 @@
+{
+    "name": "trilliant-postgres",
+    "version": "0.1.0",
+    "main": "index.js",
+    "dependencies": {
+        "pg": "^8.20.0",
+        "trilliant": "git+https://github.com/unidyne/trilliant.git"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/unidyne/trilliant-postgres.git"
+    }
+}
