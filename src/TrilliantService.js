@@ -1,3 +1,6 @@
+const
+    fs = require("fs"),
+    path = require("path");
 const {Pool} = require('pg');
 
 const { loadQueries } = require('./QueryJobs');
@@ -17,7 +20,13 @@ module.exports = class TrilliantService extends ServiceWrapper {
     }
 
     register(plug, data) {
+        let q;
 
+        if(typeof data === "string")
+            q = JSON.parse( fs.readFileSync(path.join(plug.homeDir, data)) );
+        else q = data;
+
+        plug.Queries = loadQueries(q, plug.homeDir, this);
     }
 
     getConnection() {
