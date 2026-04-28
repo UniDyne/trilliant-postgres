@@ -31,7 +31,7 @@ async function execJob(job, pool) {
 		result = await pool.query(sql, params);
 	} catch(e) {
 		console.log(e);
-		job.resultHandler(e, null);
+		return job.resultHandler(e, null);
 	}
 	// add error detection
 	job.resultHandler(null, result.rows);
