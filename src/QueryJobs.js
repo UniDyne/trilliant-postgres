@@ -22,15 +22,15 @@ async function execJob(job, pool) {
 	let sql = job.queryDef.sql;
 	let params = setParameters(job.queryDef, job.params);
 
-	console.log(sql);
-	console.log(params);
-	console.log(job.queryDef.argmap);
+	//console.log(sql);
+	//console.log(params);
+	//console.log(job.queryDef.argmap);
 
 	let result = null;
 	try {
 		result = await pool.query(sql, params);
 	} catch(e) {
-		console.log(e);
+		//console.log(e);
 		return job.resultHandler(e, null);
 	}
 	// add error detection
