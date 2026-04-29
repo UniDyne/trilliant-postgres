@@ -155,7 +155,7 @@ function loadQueries(queryList, baseDir, pool) {
         if(!queryList[i].params) queryList[i].params = [];
 
         // set named parameter mapping
-		({sql: queryList[i].sql, pargs: queryList[i].argmap} = getNamedArgMap(queryList[i].sql));
+		({sql: queryList[i].sql, pargs: queryList[i].argmap} = getNamedArgMap(queryList[i].sql, queryList[i].params));
         
         if(queryList[i].usePromise) queryHash[queryList[i].id] = createPromiseQuery(queryList[i], pool);
         else queryHash[queryList[i].id] = createCallbackQuery(queryList[i], pool);
@@ -165,12 +165,29 @@ function loadQueries(queryList, baseDir, pool) {
 }
 
 
-function getNamedArgMap(sql) {
+function getNamedArgMap(sql, params) {
 	const RX_PARAM = /@([a-z0-9_]+)/gi;
 	const pargs = [];
+
+	const typemap = {};
+	for(let i = 0; i < params.length; i++) {
+		let t;
+		switch(params[i].type) {
+			case 'int':
+				t = 'integer';
+				break;
+			case 'bit':
+				t = 'boolean';
+				break;
+			default:
+				t = params[i].type;
+		}
+		typemap[params[i].name] = t;
+	}
+
 	sql = sql.replace(RX_PARAM, (w,g,t) => {
 		pargs.push(g);
-		return `$${pargs.length}`;
+		return `$${pargs.length}::${typemap[g]}`;
 	});
 
 	//console.log(pargs);
