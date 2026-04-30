@@ -6,6 +6,8 @@ const fs = require('fs'),
 const { DiskCache } = require('trilliant');
 const ResultCache = new DiskCache(16, 60 * 60 * 1000, path.join(process.cwd(), 'cache'));
 
+const LAMBDA = () => {};
+
 
 function handleError(err, job) {
 	//#! fix this
