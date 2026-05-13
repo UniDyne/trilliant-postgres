@@ -175,6 +175,9 @@ function getNamedArgMap(sql, params) {
 	for(let i = 0; i < params.length; i++) {
 		let t;
 		switch(params[i].type) {
+			case 'tinyint':
+				t = 'smallint';
+				break;
 			case 'int':
 				t = 'integer';
 				break;
