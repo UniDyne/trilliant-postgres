@@ -116,7 +116,9 @@ function getPromiseHandler(job) {
 
 // utility method used to consistently produce the same JSON structures
 function getCanonicalJSON(obj) {
-	if(typeof obj === 'object') {
+	if( obj instanceof Date) {
+		return obj.getTime();
+	} else if(typeof obj === 'object') {
 		var keys = [];
 		// get keys and sort them
 		for(var k in obj) keys.push(k);
